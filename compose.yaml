@@ -1,0 +1,49 @@
+name: scs-company-profile-cms-local
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-scs}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-scs-local-only}
+      POSTGRES_DB: ${POSTGRES_DB:-scs_cms}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-scs} -d ${POSTGRES_DB:-scs_cms}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  cms:
+    build:
+      context: .
+      args:
+        PAYLOAD_SERVER_URL: ${PAYLOAD_SERVER_URL:-http://localhost:3101}
+        WEBSITE_URL: ${WEBSITE_URL:-http://localhost:3000}
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+      PAYLOAD_SERVER_URL: ${PAYLOAD_SERVER_URL:-http://localhost:3101}
+      WEBSITE_URL: ${WEBSITE_URL:-http://localhost:3000}
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET}
+      PAYLOAD_DB_PROVIDER: postgres
+      PAYLOAD_DB_PUSH: "true"
+      DATABASE_URL: postgresql://${POSTGRES_USER:-scs}:${POSTGRES_PASSWORD:-scs-local-only}@postgres:5432/${POSTGRES_DB:-scs_cms}
+      WEBSITE_PREVIEW_SECRET: ${WEBSITE_PREVIEW_SECRET:-}
+      WEBSITE_REVALIDATE_URL: ${WEBSITE_REVALIDATE_URL:-}
+      WEBSITE_REVALIDATE_SECRET: ${WEBSITE_REVALIDATE_SECRET:-}
+    ports:
+      - "127.0.0.1:${CMS_HTTP_PORT:-3101}:3000"
+    volumes:
+      - cms-media:/app/public/media
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres-data:
+  cms-media:

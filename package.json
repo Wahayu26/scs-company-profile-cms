@@ -1,0 +1,39 @@
+{
+  "name": "scs-company-profile-cms",
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.17.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-vm-modules --test --test-isolation=none tests/*.test.mjs",
+    "payload": "payload",
+    "cms:create-admin": "payload run scripts/create-cms-admin.mjs",
+    "cms:types": "payload generate:types",
+    "cms:importmap": "payload generate:importmap"
+  },
+  "dependencies": {
+    "@payloadcms/db-postgres": "^3.88.0",
+    "@payloadcms/db-sqlite": "^3.88.0",
+    "@payloadcms/email-nodemailer": "^3.88.0",
+    "@payloadcms/next": "^3.88.0",
+    "@payloadcms/richtext-lexical": "^3.88.0",
+    "@payloadcms/translations": "3.88.0",
+    "graphql": "^16.8.1",
+    "lucide-react": "^1.37.0",
+    "next": "^16.3.3",
+    "payload": "^3.88.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "sharp": "^0.35.4"
+  },
+  "devDependencies": {
+    "@types/node": "^26.4.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "typescript": "^7.0.2"
+  }
+}

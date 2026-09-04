@@ -1,0 +1,14 @@
+.git
+.next
+.data
+.rollback
+.pnpm-store
+node_modules
+services/core-api/target
+.env
+.env.local
+.env.production
+*.log
+tsconfig.tsbuildinfo
+public/media/*
+!public/media/.gitkeep

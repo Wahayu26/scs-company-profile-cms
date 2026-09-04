@@ -1,0 +1,66 @@
+name: scs-company-profile-cms
+
+services:
+  cms:
+    image: scs/cms:${APP_VERSION}
+    build:
+      context: .
+      args:
+        PAYLOAD_SERVER_URL: ${PAYLOAD_SERVER_URL}
+        WEBSITE_URL: ${WEBSITE_URL}
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+      PAYLOAD_SERVER_URL: ${PAYLOAD_SERVER_URL}
+      WEBSITE_URL: ${WEBSITE_URL}
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET}
+      PAYLOAD_DB_PROVIDER: postgres
+      PAYLOAD_DB_PUSH: "false"
+      DATABASE_URL: ${DATABASE_URL}
+      WEBSITE_PREVIEW_SECRET: ${WEBSITE_PREVIEW_SECRET}
+      WEBSITE_REVALIDATE_URL: ${WEBSITE_REVALIDATE_URL}
+      WEBSITE_REVALIDATE_SECRET: ${WEBSITE_REVALIDATE_SECRET}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      SMTP_FROM: ${SMTP_FROM:-noreply@sigmacore.id}
+      SMTP_FROM_NAME: ${SMTP_FROM_NAME:-Sigma Core CMS}
+    ports:
+      - "127.0.0.1:${CMS_HTTP_PORT:-3101}:3000"
+    volumes:
+      - cms-media:/app/public/media
+    networks:
+      - backend
+      - edge
+
+  migrate:
+    image: scs/cms:${APP_VERSION}
+    profiles: ["tools"]
+    command: ["pnpm", "payload", "migrate"]
+    environment:
+      NODE_ENV: production
+      PAYLOAD_SERVER_URL: ${PAYLOAD_SERVER_URL}
+      WEBSITE_URL: ${WEBSITE_URL}
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET}
+      PAYLOAD_DB_PROVIDER: postgres
+      PAYLOAD_DB_PUSH: "false"
+      DATABASE_URL: ${DATABASE_URL}
+    networks:
+      - backend
+
+volumes:
+  cms-media:
+    external: true
+    name: ${CMS_MEDIA_VOLUME}
+
+networks:
+  backend:
+    external: true
+    name: ${CMS_BACKEND_NETWORK}
+  edge:
+    external: true
+    name: ${CMS_EDGE_NETWORK}
