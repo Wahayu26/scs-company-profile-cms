@@ -17,6 +17,7 @@ public website and reverse proxy remain separate deployments.
 6. Build and validate without stopping the old CMS.
 
 ```bash
+CMS_CONTAINER=scs-company-profile-cms-cms-1 ./scripts/backup-production.sh
 docker compose --env-file .env.production -f compose.prod.yaml config --quiet
 docker compose --env-file .env.production -f compose.prod.yaml build cms
 ```

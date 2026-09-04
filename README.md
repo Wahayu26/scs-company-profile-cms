@@ -81,3 +81,7 @@ network and `cms-media` volume. `DATABASE_URL` must point to the existing
 migration or replacing the legacy CMS container.
 
 See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for the cutover sequence.
+
+To move the published testing content into production without replacing users
+or internal Payload tables, follow
+[docs/CONTENT-MIGRATION.md](docs/CONTENT-MIGRATION.md).

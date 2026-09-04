@@ -52,6 +52,27 @@ services:
     networks:
       - backend
 
+  import-content:
+    image: scs/cms:${APP_VERSION}
+    profiles: ["tools"]
+    command: ["pnpm", "content:import"]
+    environment:
+      NODE_ENV: production
+      PAYLOAD_SERVER_URL: ${PAYLOAD_SERVER_URL}
+      WEBSITE_URL: ${WEBSITE_URL}
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET}
+      PAYLOAD_DB_PROVIDER: postgres
+      PAYLOAD_DB_PUSH: "false"
+      DATABASE_URL: ${DATABASE_URL}
+      CMS_IMPORT_BUNDLE: /migration
+      CMS_IMPORT_MODE: ${CMS_IMPORT_MODE:-dry-run}
+      CMS_IMPORT_BACKUP_CONFIRMED: ${CMS_IMPORT_BACKUP_CONFIRMED:-}
+    volumes:
+      - cms-media:/app/public/media
+      - ${CMS_IMPORT_BUNDLE_HOST}:/migration:ro
+    networks:
+      - backend
+
 volumes:
   cms-media:
     external: true

@@ -12,6 +12,8 @@
     "test": "node --experimental-vm-modules --test --test-isolation=none tests/*.test.mjs",
     "payload": "payload",
     "cms:create-admin": "payload run scripts/create-cms-admin.mjs",
+    "content:export": "node scripts/export-public-content.mjs",
+    "content:import": "payload run scripts/import-content-bundle.mjs",
     "cms:types": "payload generate:types",
     "cms:importmap": "payload generate:importmap"
   },
