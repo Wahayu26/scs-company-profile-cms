@@ -21,6 +21,11 @@ through the server-only `CORE_DATABASE_URL`. Credentials never reach the
 browser, and an unavailable Core database does not prevent other CMS screens
 from loading.
 
+Before deploying a CMS release that includes the consultation workflow, back
+up `scs_core` and run `pnpm core-inquiries:migrate`. Status changes are written
+transactionally and retained in `inquiry_status_history` with the responsible
+administrator and timestamp.
+
 ## Local development
 
 Requirements: Node.js 22 and pnpm 10.

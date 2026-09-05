@@ -53,6 +53,15 @@ services:
     networks:
       - backend
 
+  core-inquiries-migrate:
+    image: scs/cms:${APP_VERSION}
+    profiles: ["tools"]
+    command: ["pnpm", "core-inquiries:migrate"]
+    environment:
+      CORE_DATABASE_URL: ${CORE_DATABASE_URL}
+    networks:
+      - backend
+
   import-content:
     image: scs/cms:${APP_VERSION}
     profiles: ["tools"]

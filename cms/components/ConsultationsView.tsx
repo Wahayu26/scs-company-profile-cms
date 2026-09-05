@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, Inbox, Mail, Phone, Search } from "lucide-react";
+import { ArrowLeft, ChevronLeft, ChevronRight, Inbox, Mail, Phone, Search } from "lucide-react";
 import type { AdminViewServerProps } from "payload";
 
-import { listCoreInquiries, normalizeInquiryQuery } from "../core-inquiries";
+import { inquiryStatuses, listCoreInquiries, normalizeInquiryQuery, type InquiryStatus } from "../core-inquiries";
 import { requireCMSAdmin } from "../require-admin";
+import InquiryStatusControl from "./InquiryStatusControl";
 
 const dateTime = new Intl.DateTimeFormat("id-ID", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Jakarta" });
 const statusLabels: Record<string, string> = { RECEIVED: "Baru", IN_PROGRESS: "Diproses", CONTACTED: "Sudah dihubungi", CLOSED: "Selesai" };
@@ -23,6 +24,7 @@ export default async function ConsultationsView({ initPageResult, searchParams }
   try {
     const result = await listCoreInquiries(searchParams);
     return <main className="scs-inquiries">
+      <Link className="scs-inquiries__back" href="/admin"><ArrowLeft size={16} /> Kembali</Link>
       <header className="scs-inquiries__header">
         <div><p><Inbox size={16} /> Customer inquiry</p><h1>Konsultasi Masuk</h1><span>Permintaan konsultasi yang dikirim melalui landing page.</span></div>
         <strong>{result.total}<small>Total konsultasi</small></strong>
@@ -40,7 +42,12 @@ export default async function ConsultationsView({ initPageResult, searchParams }
           <td><strong>{inquiry.name}</strong><span>{inquiry.company}</span><code>{inquiry.publicReference}</code><div><a href={`mailto:${inquiry.email}`}><Mail size={14} />{inquiry.email}</a>{inquiry.phone && <a href={`tel:${inquiry.phone.replace(/[^+\d]/g, "")}`}><Phone size={14} />{inquiry.phone}</a>}</div></td>
           <td><strong>{inquiry.interestSolution || "Belum menentukan"}</strong><details><summary>Lihat pesan</summary><p>{inquiry.message}</p></details>{inquiry.sourcePage && <small>Sumber: {inquiry.sourcePage}</small>}</td>
           <td>{inquiry.preferredContact || "—"}</td>
-          <td><span className={`scs-inquiry-status ${inquiry.status.toLowerCase()}`}>{statusLabels[inquiry.status] || inquiry.status}</span></td>
+          <td><InquiryStatusControl
+            currentStatus={inquiryStatuses.includes(inquiry.status as InquiryStatus) ? inquiry.status as InquiryStatus : "RECEIVED"}
+            lastChangedAt={inquiry.lastStatusChangedAt?.toISOString() ?? null}
+            lastChangedBy={inquiry.lastStatusChangedBy}
+            publicReference={inquiry.publicReference}
+          /></td>
           <td><time dateTime={inquiry.createdAt.toISOString()}>{dateTime.format(inquiry.createdAt)}</time></td>
         </tr>)}</tbody>
       </table></div> : <section className="scs-inquiries__empty"><Inbox size={28} /><h2>Belum ada hasil</h2><p>Belum ada konsultasi yang sesuai dengan filter ini.</p></section>}

@@ -4,10 +4,13 @@ export type CoreInquiry = {
   publicReference: string; name: string; company: string; email: string; phone: string | null;
   message: string; interestSolution: string | null; sourcePage: string | null;
   preferredContact: string | null; status: string; createdAt: Date;
+  lastStatusChangedAt: Date | null; lastStatusChangedBy: string | null;
 };
 
 const pageSize = 25;
-const allowedStatuses = new Set(["RECEIVED", "IN_PROGRESS", "CONTACTED", "CLOSED"]);
+export const inquiryStatuses = ["RECEIVED", "IN_PROGRESS", "CONTACTED", "CLOSED"] as const;
+export type InquiryStatus = (typeof inquiryStatuses)[number];
+const allowedStatuses = new Set<string>(inquiryStatuses);
 declare global { var scsCoreInquiryPool: Pool | undefined; }
 
 function coreDatabaseURL() {
@@ -40,15 +43,52 @@ export async function listCoreInquiries(searchParams: Record<string, string | st
   const filters = normalizeInquiryQuery(searchParams);
   const offset = (filters.page - 1) * pageSize;
   const values = [filters.query, filters.status];
-  const where = `WHERE ($1 = '' OR CONCAT_WS(' ', public_reference, name, company, email, phone, message) ILIKE '%' || $1 || '%') AND ($2 = '' OR status = $2)`;
+  const where = `WHERE ($1 = '' OR CONCAT_WS(' ', i.public_reference, i.name, i.company, i.email, i.phone, i.message) ILIKE '%' || $1 || '%') AND ($2 = '' OR i.status = $2)`;
   const [records, count] = await Promise.all([
     pool().query({
-      text: `SELECT public_reference AS "publicReference", name, company, email, phone, message, interest_solution AS "interestSolution", source_page AS "sourcePage", preferred_contact AS "preferredContact", status, created_at AS "createdAt" FROM inquiries ${where} ORDER BY created_at DESC LIMIT $3 OFFSET $4`,
+      text: `SELECT i.public_reference AS "publicReference", i.name, i.company, i.email, i.phone, i.message, i.interest_solution AS "interestSolution", i.source_page AS "sourcePage", i.preferred_contact AS "preferredContact", i.status, i.created_at AS "createdAt", audit.changed_at AS "lastStatusChangedAt", audit.changed_by_name AS "lastStatusChangedBy" FROM inquiries i LEFT JOIN LATERAL (SELECT changed_at, changed_by_name FROM inquiry_status_history h WHERE h.inquiry_public_reference = i.public_reference ORDER BY changed_at DESC, id DESC LIMIT 1) audit ON true ${where} ORDER BY i.created_at DESC LIMIT $3 OFFSET $4`,
       values: [...values, pageSize, offset],
     }),
-    pool().query<{ total: string }>({ text: `SELECT COUNT(*)::text AS total FROM inquiries ${where}`, values }),
+    pool().query<{ total: string }>({ text: `SELECT COUNT(*)::text AS total FROM inquiries i ${where}`, values }),
   ]);
   const total = Number(count.rows[0]?.total ?? 0);
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   return { inquiries: records.rows as CoreInquiry[], total, page: Math.min(filters.page, totalPages), totalPages };
+}
+
+export async function updateCoreInquiryStatus(
+  publicReference: string,
+  nextStatus: InquiryStatus,
+  actor: { id: number | string; name: string },
+) {
+  const client = await pool().connect();
+  try {
+    await client.query("BEGIN");
+    const current = await client.query<{ status: string }>({
+      text: "SELECT status FROM inquiries WHERE public_reference = $1 FOR UPDATE",
+      values: [publicReference],
+    });
+    const previousStatus = current.rows[0]?.status;
+    if (!previousStatus) {
+      await client.query("ROLLBACK");
+      return null;
+    }
+    if (previousStatus !== nextStatus) {
+      await client.query({
+        text: "UPDATE inquiries SET status = $2 WHERE public_reference = $1",
+        values: [publicReference, nextStatus],
+      });
+      await client.query({
+        text: `INSERT INTO inquiry_status_history (inquiry_public_reference, from_status, to_status, changed_by_user_id, changed_by_name) VALUES ($1, $2, $3, $4, $5)`,
+        values: [publicReference, previousStatus, nextStatus, String(actor.id), actor.name],
+      });
+    }
+    await client.query("COMMIT");
+    return { publicReference, previousStatus, status: nextStatus, changed: previousStatus !== nextStatus };
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
 }

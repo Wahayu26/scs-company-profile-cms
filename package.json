@@ -14,6 +14,7 @@
     "cms:create-admin": "payload run scripts/create-cms-admin.mjs",
     "content:export": "node scripts/export-public-content.mjs",
     "content:import": "payload run scripts/import-content-bundle.mjs",
+    "core-inquiries:migrate": "node scripts/migrate-core-inquiries.mjs",
     "cms:types": "payload generate:types",
     "cms:importmap": "payload generate:importmap"
   },
