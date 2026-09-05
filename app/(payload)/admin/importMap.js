@@ -23,8 +23,10 @@ import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { default as default_c7fdbd615166afffd15ee81a874b56b9 } from '../../../cms/components/AdminIcon'
 import { default as default_97f5c82efe5ea508e03c7ffe61b5f830 } from '../../../cms/components/AdminLogo'
+import { default as default_d4a60bb60c2dea38abfd2f6faccc18dd } from '../../../cms/components/ConsultationNavLink'
 import { default as default_ebf8f972fc47556d1739b63dde306015 } from '../../../cms/components/CMSLogout'
 import { default as default_999c2f1fc3fcacb42bedda402eacada4 } from '../../../cms/components/AdminDashboard'
+import { default as default_3d17610344057cb102726197255b9a55 } from '../../../cms/components/ConsultationsView'
 import { default as default_d752a6397c2c8e165f5f939c870e3feb } from '../../../cms/components/BrandedCreateFirstUser'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
@@ -55,8 +57,10 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "/cms/components/AdminIcon#default": default_c7fdbd615166afffd15ee81a874b56b9,
   "/cms/components/AdminLogo#default": default_97f5c82efe5ea508e03c7ffe61b5f830,
+  "/cms/components/ConsultationNavLink#default": default_d4a60bb60c2dea38abfd2f6faccc18dd,
   "/cms/components/CMSLogout#default": default_ebf8f972fc47556d1739b63dde306015,
   "/cms/components/AdminDashboard#default": default_999c2f1fc3fcacb42bedda402eacada4,
+  "/cms/components/ConsultationsView#default": default_3d17610344057cb102726197255b9a55,
   "/cms/components/BrandedCreateFirstUser#default": default_d752a6397c2c8e165f5f939c870e3feb,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

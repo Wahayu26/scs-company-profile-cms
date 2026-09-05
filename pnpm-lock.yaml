@@ -13,7 +13,7 @@ importers:
         version: 3.88.0(@libsql/client@0.14.0)(payload@3.88.0(graphql@16.8.1)(typescript@7.0.2))
       '@payloadcms/db-sqlite':
         specifier: ^3.88.0
-        version: 3.88.0(@types/pg@8.20.0)(payload@3.88.0(graphql@16.8.1)(typescript@7.0.2))(pg@8.20.0)
+        version: 3.88.0(@types/pg@8.23.1)(payload@3.88.0(graphql@16.8.1)(typescript@7.0.2))(pg@8.23.0)
       '@payloadcms/email-nodemailer':
         specifier: ^3.88.0
         version: 3.88.0(payload@3.88.0(graphql@16.8.1)(typescript@7.0.2))
@@ -26,6 +26,9 @@ importers:
       '@payloadcms/translations':
         specifier: 3.88.0
         version: 3.88.0
+      '@payloadcms/ui':
+        specifier: 3.88.0
+        version: 3.88.0(@types/react@19.2.18)(monaco-editor@0.56.0)(next@16.3.3(@types/node@26.4.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(sass@1.77.4))(payload@3.88.0(graphql@16.8.1)(typescript@7.0.2))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(typescript@7.0.2)
       graphql:
         specifier: ^16.8.1
         version: 16.8.1
@@ -38,6 +41,9 @@ importers:
       payload:
         specifier: ^3.88.0
         version: 3.88.0(graphql@16.8.1)(typescript@7.0.2)
+      pg:
+        specifier: ^8.23.0
+        version: 8.23.0
       react:
         specifier: ^19.2.8
         version: 19.2.8
@@ -51,6 +57,9 @@ importers:
       '@types/node':
         specifier: ^26.4.0
         version: 26.4.0
+      '@types/pg':
+        specifier: ^8.23.1
+        version: 8.23.1
       '@types/react':
         specifier: ^19.2.18
         version: 19.2.18
@@ -1155,6 +1164,9 @@ packages:
   '@types/pg@8.20.0':
     resolution: {integrity: sha512-bEPFOaMAHTEP1EzpvHTbmwR8UsFyHSKsRisLIHVMXnpNefSbGA1bD6CVy+qKjGSqmZqNqBDV2azOBo8TgkcVow==}
 
+  '@types/pg@8.23.1':
+    resolution: {integrity: sha512-fKVHpikPdg4GKks3JuLEhvwSyvwzF23hnabPy6DD8ljVbC7+6J5dQzdv4arV6jqq57djnMgs1HKBxX4P8aBI3A==}
+
   '@types/react-dom@19.2.5':
     resolution: {integrity: sha512-fMPwH9v7r/pp43yUd2/Mbiex5KouJwwR3dzHkhLREUC6764VyDsqxhAxv6OFEYR1RhjOyD1naqba8ECDBe7ZQg==}
     peerDependencies:
@@ -2070,6 +2082,15 @@ packages:
 
   pg@8.20.0:
     resolution: {integrity: sha512-ldhMxz2r8fl/6QkXnBD3CR9/xg694oT6DZQ2s6c/RI28OjtSOpxnPrUCGOBJ46RCUxcWdx3p6kw/xnDHjKvaRA==}
+    engines: {node: '>= 16.0.0'}
+    peerDependencies:
+      pg-native: '>=3.0.1'
+    peerDependenciesMeta:
+      pg-native:
+        optional: true
+
+  pg@8.23.0:
+    resolution: {integrity: sha512-Ip2EQCngowJLGOfCwkFhPXU7/ljlhn6Rxlmy4XYfL2Y+vyRM59+8uR2xqRWKdYmbXmxCFOAmKxBuSUCdF34qLg==}
     engines: {node: '>= 16.0.0'}
     peerDependencies:
       pg-native: '>=3.0.1'
@@ -3366,13 +3387,13 @@ snapshots:
       - sqlite3
       - supports-color
 
-  '@payloadcms/db-sqlite@3.88.0(@types/pg@8.20.0)(payload@3.88.0(graphql@16.8.1)(typescript@7.0.2))(pg@8.20.0)':
+  '@payloadcms/db-sqlite@3.88.0(@types/pg@8.23.1)(payload@3.88.0(graphql@16.8.1)(typescript@7.0.2))(pg@8.23.0)':
     dependencies:
       '@libsql/client': 0.14.0
-      '@payloadcms/drizzle': 3.88.0(@libsql/client@0.14.0)(@types/pg@8.20.0)(payload@3.88.0(graphql@16.8.1)(typescript@7.0.2))(pg@8.20.0)
+      '@payloadcms/drizzle': 3.88.0(@libsql/client@0.14.0)(@types/pg@8.23.1)(payload@3.88.0(graphql@16.8.1)(typescript@7.0.2))(pg@8.23.0)
       console-table-printer: 2.12.1
       drizzle-kit: 0.31.7
-      drizzle-orm: 0.45.2(@libsql/client@0.14.0)(@types/pg@8.20.0)(pg@8.20.0)
+      drizzle-orm: 0.45.2(@libsql/client@0.14.0)(@types/pg@8.23.1)(pg@8.23.0)
       payload: 3.88.0(graphql@16.8.1)(typescript@7.0.2)
       prompts: 2.4.2
       to-snake-case: 1.0.0
@@ -3415,6 +3436,46 @@ snapshots:
       console-table-printer: 2.12.1
       dequal: 2.0.3
       drizzle-orm: 0.45.2(@libsql/client@0.14.0)(@types/pg@8.20.0)(pg@8.20.0)
+      payload: 3.88.0(graphql@16.8.1)(typescript@7.0.2)
+      prompts: 2.4.2
+      to-snake-case: 1.0.0
+      uuid: 13.0.2
+    transitivePeerDependencies:
+      - '@aws-sdk/client-rds-data'
+      - '@cloudflare/workers-types'
+      - '@electric-sql/pglite'
+      - '@libsql/client'
+      - '@libsql/client-wasm'
+      - '@neondatabase/serverless'
+      - '@op-engineering/op-sqlite'
+      - '@opentelemetry/api'
+      - '@planetscale/database'
+      - '@prisma/client'
+      - '@tidbcloud/serverless'
+      - '@types/better-sqlite3'
+      - '@types/pg'
+      - '@types/sql.js'
+      - '@upstash/redis'
+      - '@vercel/postgres'
+      - '@xata.io/client'
+      - better-sqlite3
+      - bun-types
+      - expo-sqlite
+      - gel
+      - knex
+      - kysely
+      - mysql2
+      - pg
+      - postgres
+      - prisma
+      - sql.js
+      - sqlite3
+
+  '@payloadcms/drizzle@3.88.0(@libsql/client@0.14.0)(@types/pg@8.23.1)(payload@3.88.0(graphql@16.8.1)(typescript@7.0.2))(pg@8.23.0)':
+    dependencies:
+      console-table-printer: 2.12.1
+      dequal: 2.0.3
+      drizzle-orm: 0.45.2(@libsql/client@0.14.0)(@types/pg@8.23.1)(pg@8.23.0)
       payload: 3.88.0(graphql@16.8.1)(typescript@7.0.2)
       prompts: 2.4.2
       to-snake-case: 1.0.0
@@ -3635,6 +3696,12 @@ snapshots:
   '@types/parse-json@4.0.2': {}
 
   '@types/pg@8.20.0':
+    dependencies:
+      '@types/node': 26.4.0
+      pg-protocol: 1.16.0
+      pg-types: 2.2.0
+
+  '@types/pg@8.23.1':
     dependencies:
       '@types/node': 26.4.0
       pg-protocol: 1.16.0
@@ -3886,6 +3953,12 @@ snapshots:
       '@libsql/client': 0.14.0
       '@types/pg': 8.20.0
       pg: 8.20.0
+
+  drizzle-orm@0.45.2(@libsql/client@0.14.0)(@types/pg@8.23.1)(pg@8.23.0):
+    optionalDependencies:
+      '@libsql/client': 0.14.0
+      '@types/pg': 8.23.1
+      pg: 8.23.0
 
   end-of-stream@1.4.5:
     dependencies:
@@ -4581,6 +4654,10 @@ snapshots:
     dependencies:
       pg: 8.20.0
 
+  pg-pool@3.14.0(pg@8.23.0):
+    dependencies:
+      pg: 8.23.0
+
   pg-protocol@1.16.0: {}
 
   pg-types@2.2.0:
@@ -4595,6 +4672,16 @@ snapshots:
     dependencies:
       pg-connection-string: 2.14.0
       pg-pool: 3.14.0(pg@8.20.0)
+      pg-protocol: 1.16.0
+      pg-types: 2.2.0
+      pgpass: 1.0.5
+    optionalDependencies:
+      pg-cloudflare: 1.4.0
+
+  pg@8.23.0:
+    dependencies:
+      pg-connection-string: 2.14.0
+      pg-pool: 3.14.0(pg@8.23.0)
       pg-protocol: 1.16.0
       pg-types: 2.2.0
       pgpass: 1.0.5

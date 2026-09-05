@@ -10,3 +10,12 @@ export function requireCMSUser({ req, permissions }: AdminViewServerProps["initP
   }
   return req.user;
 }
+
+export function requireCMSAdmin(initPageResult: AdminViewServerProps["initPageResult"]) {
+  const user = requireCMSUser(initPageResult);
+  const { routes, admin } = initPageResult.req.payload.config;
+  if (!("role" in user) || user.role !== "admin") {
+    redirect(`${routes.admin}${admin.routes.unauthorized}`);
+  }
+  return user;
+}

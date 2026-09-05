@@ -11,9 +11,15 @@ ownership of direct database access.
 - Solutions, partners, projects, insights, media and website settings
 - Draft/publish workflow and preview links
 - Authenticated webhook calls that invalidate the website cache
+- Authenticated consultation inbox backed by `scs_core.inquiries`
 
 The public website is a separate Next.js application. It reads published data
 from this CMS over HTTP; it must never connect directly to PostgreSQL.
+
+The admin-only **Konsultasi Masuk** view reads the existing Core API database
+through the server-only `CORE_DATABASE_URL`. Credentials never reach the
+browser, and an unavailable Core database does not prevent other CMS screens
+from loading.
 
 ## Local development
 

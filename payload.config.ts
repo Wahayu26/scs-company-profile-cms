@@ -102,7 +102,7 @@ export default buildConfig({
 
     components: {
       /* scs-cms-ui-v1 */
-      beforeNavLinks: ["/cms/components/AdminLogo"],
+      beforeNavLinks: ["/cms/components/AdminLogo", "/cms/components/ConsultationNavLink"],
       graphics: {
         Icon: "/cms/components/AdminIcon",
         Logo: "/cms/components/AdminLogo",
@@ -113,6 +113,11 @@ export default buildConfig({
         dashboard: {
           Component:
             "/cms/components/AdminDashboard",
+        },
+
+        consultations: {
+          Component: "/cms/components/ConsultationsView",
+          path: "/consultations",
         },
 
         createFirstUser: {
