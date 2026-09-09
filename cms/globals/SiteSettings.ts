@@ -36,6 +36,19 @@ export const SiteSettings: GlobalConfig = {
       ],
     },
     {
+      name: "consultation",
+      type: "group",
+      label: "Ajakan konsultasi",
+      admin: {
+        description: "Teks di sisi kiri formulir konsultasi pada landing page.",
+      },
+      fields: [
+        { name: "eyebrow", type: "text", required: true, label: "Label kecil", defaultValue: "Let's build what's next" },
+        { name: "headline", type: "text", required: true, label: "Judul", defaultValue: "Siap membangun fondasi teknologi berikutnya?" },
+        { name: "description", type: "textarea", required: true, label: "Deskripsi", defaultValue: "Ceritakan kebutuhan infrastruktur dan sistem Anda. Tim kami siap membantu menyusun solusi yang tepat." },
+      ],
+    },
+    {
       name: "companyFacts",
       type: "array",
       label: "Company facts",

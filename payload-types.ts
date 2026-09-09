@@ -750,6 +750,14 @@ export interface SiteSetting {
     address: string;
   };
   /**
+   * Teks di sisi kiri formulir konsultasi pada landing page.
+   */
+  consultation: {
+    eyebrow: string;
+    headline: string;
+    description: string;
+  };
+  /**
    * Gunakan hanya angka atau fakta perusahaan yang sudah dapat diverifikasi.
    */
   companyFacts?:
@@ -813,6 +821,13 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         email?: T;
         phone?: T;
         address?: T;
+      };
+  consultation?:
+    | T
+    | {
+        eyebrow?: T;
+        headline?: T;
+        description?: T;
       };
   companyFacts?:
     | T
