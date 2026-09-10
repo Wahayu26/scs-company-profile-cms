@@ -12,6 +12,13 @@ const labels: Record<InquiryStatus, string> = {
   CLOSED: "Selesai",
 };
 
+const statusModifiers: Record<InquiryStatus, string> = {
+  RECEIVED: "received",
+  IN_PROGRESS: "in-progress",
+  CONTACTED: "contacted",
+  CLOSED: "closed",
+};
+
 type Props = {
   currentStatus: InquiryStatus;
   lastChangedAt: string | null;
@@ -47,6 +54,7 @@ export default function InquiryStatusControl({ currentStatus, lastChangedAt, las
   }
 
   return <div className="scs-inquiry-status-control">
+    <span className={`scs-inquiry-status ${statusModifiers[currentStatus]}`}>{labels[currentStatus]}</span>
     <select value={status} onChange={(event) => setStatus(event.target.value as InquiryStatus)} aria-label={`Status ${publicReference}`}>
       {Object.entries(labels).map(([value, label]) => <option value={value} key={value}>{label}</option>)}
     </select>

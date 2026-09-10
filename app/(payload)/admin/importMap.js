@@ -21,9 +21,9 @@ import { StrikethroughFeatureClient as StrikethroughFeatureClient_e70f5e05f09f93
 import { UnderlineFeatureClient as UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { default as default_e5647a264155b3efaa9f6c1de99f5f8d } from '../../../cms/components/CMSNav'
 import { default as default_c7fdbd615166afffd15ee81a874b56b9 } from '../../../cms/components/AdminIcon'
 import { default as default_97f5c82efe5ea508e03c7ffe61b5f830 } from '../../../cms/components/AdminLogo'
-import { default as default_d4a60bb60c2dea38abfd2f6faccc18dd } from '../../../cms/components/ConsultationNavLink'
 import { default as default_ebf8f972fc47556d1739b63dde306015 } from '../../../cms/components/CMSLogout'
 import { default as default_999c2f1fc3fcacb42bedda402eacada4 } from '../../../cms/components/AdminDashboard'
 import { default as default_3d17610344057cb102726197255b9a55 } from '../../../cms/components/ConsultationsView'
@@ -55,9 +55,9 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#UnderlineFeatureClient": UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#BoldFeatureClient": BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "/cms/components/CMSNav#default": default_e5647a264155b3efaa9f6c1de99f5f8d,
   "/cms/components/AdminIcon#default": default_c7fdbd615166afffd15ee81a874b56b9,
   "/cms/components/AdminLogo#default": default_97f5c82efe5ea508e03c7ffe61b5f830,
-  "/cms/components/ConsultationNavLink#default": default_d4a60bb60c2dea38abfd2f6faccc18dd,
   "/cms/components/CMSLogout#default": default_ebf8f972fc47556d1739b63dde306015,
   "/cms/components/AdminDashboard#default": default_999c2f1fc3fcacb42bedda402eacada4,
   "/cms/components/ConsultationsView#default": default_3d17610344057cb102726197255b9a55,

@@ -10,7 +10,7 @@ test("CMS and website origins are separate and validated", () => {
   assert.equal(cmsAuthOrigin({ PAYLOAD_SERVER_URL: "https://cms.sigmacore.id/" }), "https://cms.sigmacore.id");
   assert.equal(websiteOrigin({ WEBSITE_URL: "https://sigmacore.id/" }), "https://sigmacore.id");
   assert.equal(cmsAuthOrigin({}), "http://localhost:3101");
-  assert.equal(websiteOrigin({}), "http://localhost:3000");
+  assert.equal(websiteOrigin({}), "http://localhost:3001");
 
   for (const value of ["*", "javascript:alert(1)", "https://user:pass@cms.test", "https://cms.test/path"]) {
     assert.throws(() => cmsAuthOrigin({ PAYLOAD_SERVER_URL: value }));

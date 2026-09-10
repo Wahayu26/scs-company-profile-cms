@@ -49,3 +49,30 @@ test("consultation audit migration is transactional and idempotent", async () =>
   assert.match(sql, /changed_by_name/);
   assert.match(sql, /COMMIT;\s*$/);
 });
+
+test("consultation summary counts all statuses independently from a filtered page", async () => {
+  const { listCoreInquiries } = await import("../cms/core-inquiries.ts");
+  const previousPool = globalThis.scsCoreInquiryPool;
+  const calls = [];
+  globalThis.scsCoreInquiryPool = {
+    query: async (query) => {
+      const text = typeof query === "string" ? query : query.text;
+      calls.push(query);
+      if (text.includes("GROUP BY status")) return { rows: [
+        { status: "RECEIVED", total: "30" }, { status: "IN_PROGRESS", total: "2" },
+        { status: "CONTACTED", total: "1" }, { status: "CLOSED", total: "9" },
+      ] };
+      if (text.includes("COUNT(*)")) return { rows: [{ total: "2" }] };
+      return { rows: [{ publicReference: "SCS-TEST-1", status: "IN_PROGRESS" }] };
+    },
+  };
+  try {
+    const result = await listCoreInquiries({ status: "IN_PROGRESS", q: "ERP" });
+    assert.deepEqual(result.summary, { total: 42, RECEIVED: 30, IN_PROGRESS: 2, CONTACTED: 1, CLOSED: 9 });
+    assert.equal(result.total, 2);
+    assert.equal(result.inquiries.length, 1);
+    assert.deepEqual(calls.filter(call => typeof call !== "string").map(call => call.values.slice(0, 2)), [["ERP", "IN_PROGRESS"], ["ERP", "IN_PROGRESS"]]);
+  } finally {
+    globalThis.scsCoreInquiryPool = previousPool;
+  }
+});

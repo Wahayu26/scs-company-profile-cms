@@ -1,5 +1,7 @@
 import { Pool } from "pg";
 
+import { listLocalInquiries, localInquiryStoreEnabled, updateLocalInquiryStatus } from "./local-inquiries.ts";
+
 export type CoreInquiry = {
   publicReference: string; name: string; company: string; email: string; phone: string | null;
   message: string; interestSolution: string | null; sourcePage: string | null;
@@ -41,19 +43,26 @@ export function normalizeInquiryQuery(searchParams: Record<string, string | stri
 
 export async function listCoreInquiries(searchParams: Record<string, string | string[] | undefined> | undefined) {
   const filters = normalizeInquiryQuery(searchParams);
+  if (localInquiryStoreEnabled() && !globalThis.scsCoreInquiryPool) return listLocalInquiries(filters, pageSize);
   const offset = (filters.page - 1) * pageSize;
   const values = [filters.query, filters.status];
-  const where = `WHERE ($1 = '' OR CONCAT_WS(' ', i.public_reference, i.name, i.company, i.email, i.phone, i.message) ILIKE '%' || $1 || '%') AND ($2 = '' OR i.status = $2)`;
-  const [records, count] = await Promise.all([
+  const where = `WHERE ($1 = '' OR CONCAT_WS(' ', i.public_reference, i.name, i.company, i.email, i.phone, i.interest_solution, i.message) ILIKE '%' || $1 || '%') AND ($2 = '' OR i.status = $2)`;
+  const [records, count, totals] = await Promise.all([
     pool().query({
       text: `SELECT i.public_reference AS "publicReference", i.name, i.company, i.email, i.phone, i.message, i.interest_solution AS "interestSolution", i.source_page AS "sourcePage", i.preferred_contact AS "preferredContact", i.status, i.created_at AS "createdAt", audit.changed_at AS "lastStatusChangedAt", audit.changed_by_name AS "lastStatusChangedBy" FROM inquiries i LEFT JOIN LATERAL (SELECT changed_at, changed_by_name FROM inquiry_status_history h WHERE h.inquiry_public_reference = i.public_reference ORDER BY changed_at DESC, id DESC LIMIT 1) audit ON true ${where} ORDER BY i.created_at DESC LIMIT $3 OFFSET $4`,
       values: [...values, pageSize, offset],
     }),
     pool().query<{ total: string }>({ text: `SELECT COUNT(*)::text AS total FROM inquiries i ${where}`, values }),
+    pool().query<{ status: string; total: string }>("SELECT status, COUNT(*)::text AS total FROM inquiries GROUP BY status"),
   ]);
   const total = Number(count.rows[0]?.total ?? 0);
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
-  return { inquiries: records.rows as CoreInquiry[], total, page: Math.min(filters.page, totalPages), totalPages };
+  const summary = { total: 0, RECEIVED: 0, IN_PROGRESS: 0, CONTACTED: 0, CLOSED: 0 };
+  for (const row of totals.rows) {
+    summary.total += Number(row.total);
+    if (allowedStatuses.has(row.status)) summary[row.status as InquiryStatus] = Number(row.total);
+  }
+  return { summary, inquiries: records.rows as CoreInquiry[], total, page: Math.min(filters.page, totalPages), totalPages };
 }
 
 export async function updateCoreInquiryStatus(
@@ -61,6 +70,7 @@ export async function updateCoreInquiryStatus(
   nextStatus: InquiryStatus,
   actor: { id: number | string; name: string },
 ) {
+  if (localInquiryStoreEnabled() && !globalThis.scsCoreInquiryPool) return updateLocalInquiryStatus(publicReference, nextStatus, actor);
   const client = await pool().connect();
   try {
     await client.query("BEGIN");

@@ -102,7 +102,7 @@ export default buildConfig({
 
     components: {
       /* scs-cms-ui-v1 */
-      beforeNavLinks: ["/cms/components/AdminLogo", "/cms/components/ConsultationNavLink"],
+      Nav: "/cms/components/CMSNav",
       graphics: {
         Icon: "/cms/components/AdminIcon",
         Logo: "/cms/components/AdminLogo",
