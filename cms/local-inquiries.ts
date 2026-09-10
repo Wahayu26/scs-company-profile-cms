@@ -3,7 +3,7 @@ import { mkdirSync } from "node:fs";
 import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
 
-import type { CoreInquiry, InquiryStatus } from "./core-inquiries";
+import type { CoreInquiry, InquiryStatus } from "./core-inquiries.ts";
 
 type InquiryInput = {
   name: string;

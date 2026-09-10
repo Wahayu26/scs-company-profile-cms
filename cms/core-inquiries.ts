@@ -1,6 +1,6 @@
 import { Pool } from "pg";
 
-import { listLocalInquiries, localInquiryStoreEnabled, updateLocalInquiryStatus } from "./local-inquiries";
+import { listLocalInquiries, localInquiryStoreEnabled, updateLocalInquiryStatus } from "./local-inquiries.ts";
 
 export type CoreInquiry = {
   publicReference: string; name: string; company: string; email: string; phone: string | null;
