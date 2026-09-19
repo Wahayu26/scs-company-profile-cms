@@ -106,7 +106,9 @@ export function withContentWorkflow(collection: CollectionConfig): CollectionCon
   };
 }
 
-const text = (name: string, label: string): Field => ({ name, label, type: 'text', required: true });
+const text = (name: string, label: string, defaultValue?: string): Field => ({
+  name, label, type: 'text', required: true, ...(defaultValue ? { defaultValue } : {}),
+});
 const description: Field = { name: 'description', label: 'Deskripsi', type: 'textarea', required: true };
 const heading: Field[] = [text('eyebrow', 'Label kecil'), text('title', 'Judul bagian'), description];
 
@@ -132,6 +134,9 @@ export function withSiteWorkflow(global: GlobalConfig): GlobalConfig {
         text('eyebrow', 'Label kecil'), text('headline', 'Judul'), text('highlight', 'Judul aksen'), description,
       ] },
       { name: 'workflow', label: 'Cara kerja', type: 'group', fields: [...heading,
+        { name: 'image', label: 'Gambar bagian', type: 'upload', relationTo: 'media' },
+        text('imageAlt', 'Teks alternatif gambar', 'Infrastruktur data center modern'),
+        text('badge', 'Label pada gambar', 'End-to-end system integration'),
         { name: 'steps', label: 'Tahapan', type: 'array', required: true, minRows: 1, maxRows: 12,
           fields: [text('step', 'Nomor'), text('title', 'Nama tahap'), { name: 'text', label: 'Penjelasan', type: 'textarea', required: true }] },
       ] },

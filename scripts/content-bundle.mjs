@@ -137,18 +137,36 @@ export function mapContentDocument(collection, doc, maps) {
   throw new Error(`Unsupported collection ${collection}.`);
 }
 
-export function cleanSiteSettings(settings) {
+export function cleanSiteSettings(settings, mediaMap) {
   const group = (value, keys) => Object.fromEntries(keys
     .filter((key) => value && typeof value === 'object' && value[key] !== undefined)
     .map((key) => [key, value[key]]));
+  const media = (value, label) => {
+    const id = sourceID(value);
+    if (id === null) return null;
+    return mediaMap ? mappedRelation(value, mediaMap, label) : (value?.id ?? value);
+  };
   return {
-    hero: group(settings.hero, ['eyebrow', 'headline', 'highlight', 'description']),
+    header: group(settings.header, ['aboutLabel', 'solutionsLabel', 'workflowLabel', 'projectsLabel', 'insightsLabel', 'ecosystemLabel', 'consultationLabel', 'menuEyebrow', 'menuTitle', 'menuLinkLabel', 'mobileDetailLabel']),
+    hero: {
+      ...group(settings.hero, ['eyebrow', 'headline', 'highlight', 'description', 'imageAlt', 'primaryButtonLabel', 'secondaryButtonLabel', 'proofOne', 'proofTwo', 'proofThree', 'proofFour']),
+      image: media(settings.hero?.image, 'site hero image'),
+    },
+    solutionsSection: group(settings.solutionsSection, ['eyebrow', 'title', 'description', 'cardLinkLabel', 'emptyMessage', 'emptyButtonLabel']),
+    projectsSection: group(settings.projectsSection, ['eyebrow', 'title', 'description', 'linkLabel', 'confidentialLabel']),
+    ecosystemSection: group(settings.ecosystemSection, ['eyebrow', 'title', 'description']),
+    insightsSection: group(settings.insightsSection, ['eyebrow', 'title', 'description', 'linkLabel']),
     contact: group(settings.contact, ['email', 'phone', 'address']),
+    consultation: group(settings.consultation, ['eyebrow', 'headline', 'description']),
+    contactForm: group(settings.contactForm, ['submitLabel', 'privacyText', 'unknownSolutionLabel']),
+    whatsapp: group(settings.whatsapp, ['eyebrow', 'label', 'message']),
+    footer: group(settings.footer, ['tagline', 'ctaLabel', 'navigationTitle', 'contactTitle', 'backToTopLabel', 'copyright']),
     companyFacts: cleanRows(settings.companyFacts, ['value', 'label']),
     seo: group(settings.seo, ['title', 'description']),
     about: group(settings.about, ['eyebrow', 'headline', 'highlight', 'description']),
     workflow: {
-      ...group(settings.workflow, ['eyebrow', 'title', 'description']),
+      ...group(settings.workflow, ['eyebrow', 'title', 'description', 'imageAlt', 'badge']),
+      image: media(settings.workflow?.image, 'workflow image'),
       steps: cleanRows(settings.workflow?.steps, ['step', 'title', 'text']),
     },
     strengths: {
