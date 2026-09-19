@@ -1,7 +1,5 @@
 import { Pool } from "pg";
 
-import { listLocalInquiries, localInquiryStoreEnabled, updateLocalInquiryStatus } from "./local-inquiries";
-
 export type CoreInquiry = {
   publicReference: string; name: string; company: string; email: string; phone: string | null;
   message: string; interestSolution: string | null; sourcePage: string | null;
@@ -43,7 +41,10 @@ export function normalizeInquiryQuery(searchParams: Record<string, string | stri
 
 export async function listCoreInquiries(searchParams: Record<string, string | string[] | undefined> | undefined) {
   const filters = normalizeInquiryQuery(searchParams);
-  if (localInquiryStoreEnabled() && !globalThis.scsCoreInquiryPool) return listLocalInquiries(filters, pageSize);
+  if (!globalThis.scsCoreInquiryPool) {
+    const localStore = await import("./local-inquiries");
+    if (localStore.localInquiryStoreEnabled()) return localStore.listLocalInquiries(filters, pageSize);
+  }
   const offset = (filters.page - 1) * pageSize;
   const values = [filters.query, filters.status];
   const where = `WHERE ($1 = '' OR CONCAT_WS(' ', i.public_reference, i.name, i.company, i.email, i.phone, i.interest_solution, i.message) ILIKE '%' || $1 || '%') AND ($2 = '' OR i.status = $2)`;
@@ -70,7 +71,10 @@ export async function updateCoreInquiryStatus(
   nextStatus: InquiryStatus,
   actor: { id: number | string; name: string },
 ) {
-  if (localInquiryStoreEnabled() && !globalThis.scsCoreInquiryPool) return updateLocalInquiryStatus(publicReference, nextStatus, actor);
+  if (!globalThis.scsCoreInquiryPool) {
+    const localStore = await import("./local-inquiries");
+    if (localStore.localInquiryStoreEnabled()) return localStore.updateLocalInquiryStatus(publicReference, nextStatus, actor);
+  }
   const client = await pool().connect();
   try {
     await client.query("BEGIN");
