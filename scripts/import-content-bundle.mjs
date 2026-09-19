@@ -152,7 +152,7 @@ try {
   }
 
   const currentSettings = await payload.findGlobal({ slug: 'site-settings', depth: 0, draft: true, overrideAccess: true });
-  const incomingSettings = cleanSiteSettings(manifest.settings || {});
+  const incomingSettings = cleanSiteSettings(manifest.settings || {}, mediaMap);
   const mergedSettings = fillMissing(currentSettings || {}, incomingSettings);
   const changed = JSON.stringify(cleanSiteSettings(currentSettings || {})) !== JSON.stringify(cleanSiteSettings(mergedSettings));
   if (changed) {

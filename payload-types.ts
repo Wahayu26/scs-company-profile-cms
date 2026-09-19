@@ -738,11 +738,61 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface SiteSetting {
   id: number;
+  header: {
+    aboutLabel: string;
+    solutionsLabel: string;
+    workflowLabel: string;
+    projectsLabel: string;
+    insightsLabel: string;
+    ecosystemLabel: string;
+    consultationLabel: string;
+    menuEyebrow: string;
+    menuTitle: string;
+    menuLinkLabel: string;
+    mobileDetailLabel: string;
+  };
   hero: {
     eyebrow: string;
     headline: string;
     highlight: string;
     description: string;
+    image?: (number | null) | Media;
+    imageAlt: string;
+    primaryButtonLabel: string;
+    secondaryButtonLabel: string;
+    proofOne: string;
+    proofTwo: string;
+    proofThree: string;
+    proofFour: string;
+  };
+  /**
+   * Judul dan label pada bagian kartu solusi. Isi masing-masing kartu dikelola melalui menu Solusi.
+   */
+  solutionsSection: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    cardLinkLabel: string;
+    emptyMessage: string;
+    emptyButtonLabel: string;
+  };
+  projectsSection: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    linkLabel: string;
+    confidentialLabel: string;
+  };
+  ecosystemSection: {
+    eyebrow: string;
+    title: string;
+    description: string;
+  };
+  insightsSection: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    linkLabel: string;
   };
   contact: {
     email: string;
@@ -756,6 +806,24 @@ export interface SiteSetting {
     eyebrow: string;
     headline: string;
     description: string;
+  };
+  contactForm: {
+    submitLabel: string;
+    privacyText: string;
+    unknownSolutionLabel: string;
+  };
+  whatsapp: {
+    eyebrow: string;
+    label: string;
+    message: string;
+  };
+  footer: {
+    tagline: string;
+    ctaLabel: string;
+    navigationTitle: string;
+    contactTitle: string;
+    backToTopLabel: string;
+    copyright: string;
   };
   /**
    * Gunakan hanya angka atau fakta perusahaan yang sudah dapat diverifikasi.
@@ -781,6 +849,9 @@ export interface SiteSetting {
     eyebrow: string;
     title: string;
     description: string;
+    image?: (number | null) | Media;
+    imageAlt: string;
+    badge: string;
     steps: {
       step: string;
       title: string;
@@ -807,6 +878,21 @@ export interface SiteSetting {
  * via the `definition` "site-settings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
+  header?:
+    | T
+    | {
+        aboutLabel?: T;
+        solutionsLabel?: T;
+        workflowLabel?: T;
+        projectsLabel?: T;
+        insightsLabel?: T;
+        ecosystemLabel?: T;
+        consultationLabel?: T;
+        menuEyebrow?: T;
+        menuTitle?: T;
+        menuLinkLabel?: T;
+        mobileDetailLabel?: T;
+      };
   hero?:
     | T
     | {
@@ -814,6 +900,48 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         headline?: T;
         highlight?: T;
         description?: T;
+        image?: T;
+        imageAlt?: T;
+        primaryButtonLabel?: T;
+        secondaryButtonLabel?: T;
+        proofOne?: T;
+        proofTwo?: T;
+        proofThree?: T;
+        proofFour?: T;
+      };
+  solutionsSection?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        description?: T;
+        cardLinkLabel?: T;
+        emptyMessage?: T;
+        emptyButtonLabel?: T;
+      };
+  projectsSection?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        description?: T;
+        linkLabel?: T;
+        confidentialLabel?: T;
+      };
+  ecosystemSection?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        description?: T;
+      };
+  insightsSection?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        description?: T;
+        linkLabel?: T;
       };
   contact?:
     | T
@@ -828,6 +956,30 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         eyebrow?: T;
         headline?: T;
         description?: T;
+      };
+  contactForm?:
+    | T
+    | {
+        submitLabel?: T;
+        privacyText?: T;
+        unknownSolutionLabel?: T;
+      };
+  whatsapp?:
+    | T
+    | {
+        eyebrow?: T;
+        label?: T;
+        message?: T;
+      };
+  footer?:
+    | T
+    | {
+        tagline?: T;
+        ctaLabel?: T;
+        navigationTitle?: T;
+        contactTitle?: T;
+        backToTopLabel?: T;
+        copyright?: T;
       };
   companyFacts?:
     | T
@@ -856,6 +1008,9 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         eyebrow?: T;
         title?: T;
         description?: T;
+        image?: T;
+        imageAlt?: T;
+        badge?: T;
         steps?:
           | T
           | {
